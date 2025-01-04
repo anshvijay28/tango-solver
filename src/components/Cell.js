@@ -10,17 +10,17 @@ function Cell({ bgColor }) {
 	return (
 		<button
 			onClick={handleClick}
-			className="bg-gray-500 text-white font-bold py-8 px-8 border rounded"
+			className="bg-gray-500 text-white font-bold py-4 px-4 border rounded"
 			style={{ backgroundColor: bgColor }}
 		>
             {clicks === 0 && (
-				<div className="w-8 h-8 rounded-full"></div>
+				<div className="w-5 h-5 rounded-full"></div>
 			)}
 			{clicks === 1 && (
-				<div className="w-8 h-8 rounded-full bg-yellow-400 border-2 border-yellow-500"></div>
+				<div className="w-5 h-5 rounded-full bg-yellow-400 border-2 border-yellow-500"></div>
 			)}
 			{clicks === 2 && (
-				<div className="w-8 h-8 relative z-10">
+				<div className="w-5 h-5">
 					<img width="30px" src={moon} alt="moon.png" />
 				</div>
 			)}

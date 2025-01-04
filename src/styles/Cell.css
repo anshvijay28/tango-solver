@@ -1,0 +1,9 @@
+.cell-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    cursor: pointer;
+    outline: none;
+  }
