@@ -3,10 +3,13 @@ import Cell from '../components/Cell.js';
 
 
 function App() {
+
   return (
     <div className="App">
-      <div className="cellContainer">
-        <Cell bgColor={"#F9F9F9"}/>
+      <div className="gridContainer">
+        {Array.from({ length: 36 }).map((_, index) => (
+          <Cell key={index} bgColor={"#F9F9F9"} />
+        ))}
       </div>
     </div>
   );
