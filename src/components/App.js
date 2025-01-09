@@ -1,10 +1,13 @@
 import { useState } from "react";
 import "../styles/App.css";
 import Cell from "../components/Cell.js";
+import ConfigButton from "./ConfigButton.js";
 
 function App() {
 
-  // honestly not sure why we need this to be a state variable yet
+  // TODO pass down grid and setGrid to cell and add its value to cell
+
+  // ohhhh this needs to keep track of the signnnnn
 	const [grid, setGrid] = useState(
 		Array.from({ length: 6 }, (_, r) =>
 			Array.from({ length: 6 }, (_, c) => ({
@@ -42,6 +45,10 @@ function App() {
 					))
 				)}
 			</div>
+      <div className="button-container">
+        <ConfigButton text="Solve"/>
+        <ConfigButton text="Clear"/>
+      </div>
 		</div>
 	);
 }
