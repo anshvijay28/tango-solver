@@ -1,24 +1,21 @@
 import { useState } from "react";
 import "../styles/App.css";
 import Cell from "../components/Cell.js";
-import ConfigButton from "./ConfigButton.js";
+import SolveButton from "./SolveButton.js";
+import ClearButton from "./ClearButton.js";
 
 function App() {
-
-  // TODO pass down grid and setGrid to cell and add its value to cell
-
-  // ohhhh this needs to keep track of the signnnnn
 	const [grid, setGrid] = useState(
 		Array.from({ length: 6 }, (_, r) =>
 			Array.from({ length: 6 }, (_, c) => ({
 				bgColor: "#F9F9F9",
 				row: r,
 				col: c,
-        symbol: 0,
+				symbol: 0,
 			}))
 		)
 	);
-  
+
 	const [signs, setSigns] = useState(
 		Array.from({ length: 6 }, () =>
 			Array.from({ length: 6 }, () => ({
@@ -42,16 +39,16 @@ function App() {
 							col={cell.col}
 							signs={signs}
 							setSigns={setSigns}
-              grid={grid}
-              setGrid={setGrid}
+							grid={grid}
+							setGrid={setGrid}
 						/>
 					))
 				)}
 			</div>
-      <div className="button-container">
-        <ConfigButton text="Solve"/>
-        <ConfigButton text="Clear"/>
-      </div>
+			<div className="button-container">
+				<SolveButton text="Solve" />
+				<ClearButton text="Clear" setGrid={setGrid} setSigns={setSigns} />
+			</div>
 		</div>
 	);
 }
