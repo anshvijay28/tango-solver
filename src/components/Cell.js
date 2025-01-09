@@ -8,13 +8,49 @@ import {
 	SYMBOL_OFFSET,
 } from "../constants";
 
-function Cell({ bgColor }) {
-	const [clicks, setClicks] = useState(0);
+const boundsCheck = (row, col, dir, signs) => {
+	if (
+		(dir === "north" && row === 0) ||
+		(dir === "south" && row === signs.length - 1) ||
+		(dir === "west" && col === 0) ||
+		(dir === "east" && col === signs[0].length - 1)
+	)
+		return false;
 
-  // const [leftBox, setLeftBox] = useState(false);
-  // const [rightBox, setRightBox] = useState(false);
-  // const [topBox, setTopBox] = useState(false);
-  // const [bottomBox, setBottomBox] = useState(false);
+	return true;
+};
+
+const changeSigns = (row, col, side, signs) => {
+	signs[row][col] = {
+		...signs[row][col],
+		[side]: (signs[row][col][side] + 1) % 3,
+	};
+	return signs;
+};
+
+const dirToSide = {
+	north: "top",
+	south: "bottom",
+	west: "left",
+	east: "right",
+};
+
+const dirToNeiSide = {
+	north: "bottom",
+	south: "top",
+	west: "right",
+	east: "left",
+};
+
+const dirToNeiInc = {
+	north: [-1, 0],
+	south: [1, 0],
+	west: [0, -1],
+	east: [0, 1],
+};
+
+function Cell({ bgColor, row, col, signs, setSigns }) {
+	const [clicks, setClicks] = useState(0);
 
 	const handleClick = (e) => {
 		const rect = e.target.getBoundingClientRect();
@@ -25,27 +61,43 @@ function Cell({ bgColor }) {
 			const x = e.clientX - rect.left;
 			const y = e.clientY - rect.top;
 
-			const top =
+			const north =
 				x >= SYMBOL_OFFSET &&
 				x <= CELL_SIZE - SYMBOL_OFFSET &&
 				y <= SYMBOL_SPACE;
-			const bottom =
+			const south =
 				x >= SYMBOL_OFFSET &&
 				x <= CELL_SIZE - SYMBOL_OFFSET &&
 				y >= CELL_SIZE - SYMBOL_SPACE;
-			const left =
+			const west =
 				x <= SYMBOL_SPACE &&
 				y >= SYMBOL_OFFSET &&
 				y <= CELL_SIZE - SYMBOL_OFFSET;
-			const right =
+			const east =
 				x >= CELL_SIZE - SYMBOL_SPACE &&
 				y >= SYMBOL_OFFSET &&
 				y <= CELL_SIZE - SYMBOL_OFFSET;
 
-			if (top || bottom || left || right) {
-				// i need to some how render the proper half of this logo
-        
-        console.log("= and x land!!!");
+			const directions = { north, south, west, east };
+			const dir = Object.keys(directions).find((key) => directions[key]);
+
+			// some bounds checking for edge clicks
+			if (north || south || west || east) {
+				// bounds check
+				if (!boundsCheck(row, col, dir, signs)) return;
+
+				const newSigns = signs.map((row) => [...row]);
+
+				// updating current square
+				const side = dirToSide[dir];
+				changeSigns(row, col, side, newSigns);
+
+				// updating neighbor square
+				const neiSide = dirToNeiSide[dir];
+				const [dr, dc] = dirToNeiInc[dir];
+				changeSigns(row + dr, col + dc, neiSide, newSigns);
+
+				setSigns(newSigns);
 			} else {
 				setClicks((clicks + 1) % 3);
 			}
