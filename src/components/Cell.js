@@ -19,12 +19,12 @@ const boundsCheck = (row, col, dir, signs) => {
 	return true;
 };
 
-const changeSigns = (row, col, side, signs) => {
-	signs[row][col] = {
-		...signs[row][col],
-		[side]: (signs[row][col][side] + 1) % 3,
+const changeGridValue = (row, col, param, grid) => {
+	grid[row][col] = {
+		...grid[row][col],
+		[param]: (grid[row][col][param] + 1) % 3,
 	};
-	return signs;
+	return grid;
 };
 
 const dirToSide = {
@@ -48,8 +48,7 @@ const dirToNeiInc = {
 	east: [0, 1],
 };
 
-function Cell({ bgColor, row, col, signs, setSigns }) {
-	const [clicks, setClicks] = useState(0);
+function Cell({ bgColor, row, col, signs, setSigns, grid, setGrid }) {
 
 	const handleClick = (e) => {
 		const rect = e.target.getBoundingClientRect();
@@ -82,16 +81,18 @@ function Cell({ bgColor, row, col, signs, setSigns }) {
 
 			// updating current square
 			const side = dirToSide[dir];
-			changeSigns(row, col, side, newSigns);
+			changeGridValue(row, col, side, newSigns);
 
 			// updating neighbor square
 			const neiSide = dirToNeiSide[dir];
 			const [dr, dc] = dirToNeiInc[dir];
-			changeSigns(row + dr, col + dc, neiSide, newSigns);
+			changeGridValue(row + dr, col + dc, neiSide, newSigns);
 
 			setSigns(newSigns);
 		} else {
-			setClicks((clicks + 1) % 3);
+      const newGrid = grid.map((row) => [...row]);
+      changeGridValue(row, col, "symbol", newGrid);
+      setGrid(newGrid);
 		}
 	};
 
@@ -101,19 +102,19 @@ function Cell({ bgColor, row, col, signs, setSigns }) {
 			className="bg-gray-500 border flex items-center justify-center relative"
 			style={{ backgroundColor: bgColor }}
 		>
-			{clicks === 0 && (
+			{grid[row][col].symbol === 0 && (
 				<div
 					style={{ pointerEvents: "none" }}
 					className="w-6 h-6 rounded-full"
 				></div>
 			)}
-			{clicks === 1 && (
+			{grid[row][col].symbol === 1 && (
 				<div
 					style={{ pointerEvents: "none" }}
 					className="w-6 h-6 rounded-full bg-yellow-400 border-2 border-yellow-500"
 				></div>
 			)}
-			{clicks === 2 && (
+			{grid[row][col].symbol === 2 && (
 				<div style={{ pointerEvents: "none" }} className="w-6 h-6">
 					<img src={moon} alt="moon.png" />
 				</div>
