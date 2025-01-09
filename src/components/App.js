@@ -14,6 +14,7 @@ function App() {
 				bgColor: "#F9F9F9",
 				row: r,
 				col: c,
+        symbol: 0,
 			}))
 		)
 	);
@@ -41,6 +42,8 @@ function App() {
 							col={cell.col}
 							signs={signs}
 							setSigns={setSigns}
+              grid={grid}
+              setGrid={setGrid}
 						/>
 					))
 				)}

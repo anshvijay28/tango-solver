@@ -14,3 +14,6 @@ function ConfigButton({ text }) {
 }
 
 export default ConfigButton;
+
+// clear will need grid and setGrid
+// solve will need, grid, setGrid, and signs
