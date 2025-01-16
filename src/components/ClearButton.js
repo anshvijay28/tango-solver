@@ -7,6 +7,7 @@ function ClearButton({ setGrid, setSigns }) {
 				row: r,
 				col: c,
 				symbol: 0,
+				error: false,
 			}))
 		);
 		setGrid(newGrid);

@@ -1,11 +1,6 @@
-import { useState } from "react";
 import "../styles/Cell.css";
 import moon from "../images/moon.png";
-import {
-	CELL_SIZE,
-	SYMBOL_SPACE,
-	SYMBOL_OFFSET,
-} from "../constants";
+import { CELL_SIZE, SYMBOL_SPACE, SYMBOL_OFFSET } from "../constants";
 
 const boundsCheck = (row, col, dir, signs) => {
 	if (
@@ -49,7 +44,6 @@ const dirToNeiInc = {
 };
 
 function Cell({ bgColor, row, col, signs, setSigns, grid, setGrid }) {
-
 	const handleClick = (e) => {
 		const rect = e.target.getBoundingClientRect();
 
@@ -90,17 +84,30 @@ function Cell({ bgColor, row, col, signs, setSigns, grid, setGrid }) {
 
 			setSigns(newSigns);
 		} else {
-      const newGrid = grid.map((row) => [...row]);
-      changeGridValue(row, col, "symbol", newGrid);
-      setGrid(newGrid);
+			const newGrid = grid.map((row) => [...row]);
+			changeGridValue(row, col, "symbol", newGrid);
+			setGrid(newGrid);
 		}
+	};
+
+	const styleObj = {
+		backgroundColor: bgColor,
+		backgroundImage: grid[row][col].error
+			? `repeating-linear-gradient(
+          45deg, 
+          rgba(255, 0, 0, 0.1), 
+          rgba(255, 0, 0, 0.1) 4px, 
+          rgba(255, 0, 0, 0.2) 4px, 
+          rgba(255, 0, 0, 0.2) 8px
+        )`
+			: undefined,
 	};
 
 	return (
 		<button
 			onClick={handleClick}
 			className="bg-gray-500 border flex items-center justify-center relative"
-			style={{ backgroundColor: bgColor }}
+			style={styleObj}
 		>
 			{grid[row][col].symbol === 0 && (
 				<div

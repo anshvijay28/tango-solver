@@ -12,6 +12,7 @@ function App() {
 				row: r,
 				col: c,
 				symbol: 0,
+				error: false,
 			}))
 		)
 	);
@@ -46,8 +47,17 @@ function App() {
 				)}
 			</div>
 			<div className="button-container">
-				<SolveButton text="Solve" />
-				<ClearButton text="Clear" setGrid={setGrid} setSigns={setSigns} />
+				<SolveButton
+					text="Solve"
+					grid={grid}
+					setGrid={setGrid}
+					signs={signs}
+				/>
+				<ClearButton 
+          text="Clear" 
+          setGrid={setGrid} 
+          setSigns={setSigns} 
+        />
 			</div>
 		</div>
 	);
