@@ -1,20 +1,35 @@
 import { useEffect, useRef, useState } from "react";
 
-const isSolveable = (grid, signs) => {
+const cleanCoords = (coords) => {
+  const coordsStr = new Set(coords.map(JSON.stringify));
+  const cleaned = [];
+
+  for (const coord of coordsStr)
+    cleaned.push([parseInt(coord[1]), parseInt(coord[3])]);
+
+  return cleaned;
+}
+
+const isSolveable = (grid, signs) => {  // SO MANY CASES!!!!
   let solveObj = {
     solveable: true,
-    culprits: []
+    culprits: [],
   }
-
-  // more than 3 in row check
-  for (let r = 0; r < signs.length; r++) {
+  // more than 3 in row check + account for equal symbols
+  for (let r = 0; r < grid.length; r++) {
     let suns = [];
     let moons = [];
-		for (let c = 0; c < signs[0].length; c++) {
-      if (grid[r][c].symbol === 1)
-        suns.push([r, c]);
-      if (grid[r][c].symbol === 1)
-        moons.push([r, c]);
+		for (let c = 0; c < grid[0].length; c++) {
+      if (grid[r][c].symbol) {
+        let symbolArr = grid[r][c].symbol === 1 ? suns : moons;
+        symbolArr.push([r, c]);
+        
+        if (signs[r][c].left === 1 && grid[r][c - 1].symbol === 0)
+          symbolArr.push([r, c - 1]);  
+
+        if (signs[r][c].right === 1 && grid[r][c + 1].symbol === 0)
+          symbolArr.push([r, c + 1]);
+      }
     }
     if (suns.length > 3) {
       solveObj.solveable = false;
@@ -31,10 +46,16 @@ const isSolveable = (grid, signs) => {
     let suns = [];
     let moons = [];
 		for (let r = 0; r < signs[0].length; r++) {
-      if (grid[r][c].symbol === 1)
-        suns.push([r, c]);
-      if (grid[r][c].symbol === 1)
-        moons.push([r, c]);
+      if (grid[r][c].symbol) {
+        let symbolArr = grid[r][c].symbol === 1 ? suns : moons;
+        symbolArr.push([r, c]);
+        
+        if (signs[r][c].top === 1 && grid[r - 1][c].symbol === 0) // don't needs to bounds check!
+          symbolArr.push([r - 1, c]);  
+
+        if (signs[r][c].bottom === 1 && grid[r + 1][c].symbol === 0)
+          symbolArr.push([r + 1, c]);
+      }
     }
     if (suns.length > 3) {
       solveObj.solveable = false;
@@ -73,18 +94,17 @@ const isSolveable = (grid, signs) => {
 	for (let r = 0; r < grid.length; r++) {
 		for (let c = 0; c < grid[0].length; c++) {
 			if (
-        grid[r][c].symbol > 0 &&
-				grid[r][c].symbol === (r > 0 ? grid[r - 1][c].symbol : -1) &&
+        grid[r][c].symbol &&
+				grid[r][c].symbol === (r ? grid[r - 1][c].symbol : -1) &&
 				grid[r][c].symbol === (r < grid.length - 1 ? grid[r + 1][c].symbol : -1)
 			) {
         solveObj.solveable = false;
         solveObj.culprits = [...solveObj.culprits, ...[[r - 1, c], [r, c], [r + 1, c]]];
-
       }
 
 			if (
-        grid[r][c].symbol > 0 &&
-				grid[r][c].symbol === (c > 0 ? grid[r][c - 1].symbol : -1) &&
+        grid[r][c].symbol &&
+				grid[r][c].symbol === (c ? grid[r][c - 1].symbol : -1) &&
 				grid[r][c].symbol === (c < grid[0].length - 1 ? grid[r][c + 1].symbol : -1)
 			) {
         solveObj.solveable = false;
@@ -96,12 +116,12 @@ const isSolveable = (grid, signs) => {
   // 2 symbol and 1 = sign check
   for (let r = 0; r < grid.length; r++) {
 		for (let c = 0; c < grid[0].length; c++) {
-      if (grid[r][c].symbol > 0) {
+      if (grid[r][c].symbol) {
         if (
           (signs[r][c].top === 1 && 
             grid[r][c].symbol === (r < grid.length - 1 ? grid[r + 1][c].symbol : -1)) ||
           (signs[r][c].bottom === 1 && 
-            grid[r][c].symbol === (r > 0 ? grid[r - 1][c].symbol : -1))
+            grid[r][c].symbol === (r ? grid[r - 1][c].symbol : -1))
         ) {
           solveObj.solveable = false;
           solveObj.culprits = [...solveObj.culprits, ...[[r - 1, c], [r, c], [r + 1, c]]];
@@ -111,7 +131,7 @@ const isSolveable = (grid, signs) => {
           (signs[r][c].left === 1 && 
             grid[r][c].symbol === (c < grid[0].length - 1 ? grid[r][c + 1].symbol : -1)) ||
           (signs[r][c].right === 1 && 
-            grid[r][c].symbol === (c > 0 ? grid[r][c - 1].symbol : -1))
+            grid[r][c].symbol === (c ? grid[r][c - 1].symbol : -1))
         ) {
           solveObj.solveable = false;
           solveObj.culprits = [...solveObj.culprits, ...[[r, c - 1], [r, c], [r, c + 1]]];
@@ -119,25 +139,51 @@ const isSolveable = (grid, signs) => {
       } else {
         // case where middle square is empty and has equal sign on bottom or top
         if (
-          (r > 0 && r < grid.length - 1) &&
+          (r && r < grid.length - 1) &&
           (signs[r][c].top === 1 || signs[r][c].bottom === 1) &&
           (grid[r - 1][c].symbol === grid[r + 1][c].symbol) &&
-          (grid[r - 1][c].symbol > 0)          
+          (grid[r - 1][c].symbol)          
         ) {
           solveObj.solveable = false;
           solveObj.culprits = [...solveObj.culprits, ...[[r - 1, c], [r, c], [r + 1, c]]];
         }
         
         if (
-          (c > 0 && c < grid[0].length - 1) &&
+          (c && c < grid[0].length - 1) &&
           (signs[r][c].left === 1 || signs[r][c].right === 1) &&
           (grid[r][c - 1].symbol === grid[r][c + 1].symbol) &&
-          (grid[r][c - 1].symbol > 0)          
+          (grid[r][c - 1].symbol)          
         ) {
           solveObj.solveable = false;
           solveObj.culprits = [...solveObj.culprits, ...[[r, c - 1], [r, c], [r, c + 1]]];
         }
       }      
+    }
+  }
+
+  // check to see if signs are being followed
+  for (let r = 0; r < grid.length; r++) {
+    for (let c = 0; c < grid[0].length; c++) {
+      // right neighbor
+      if (signs[r][c].right && grid[r][c].symbol && grid[r][c + 1].symbol) {
+        if (
+          (signs[r][c].right === 1 && grid[r][c].symbol !== grid[r][c + 1].symbol) ||
+          (signs[r][c].right === 2 && grid[r][c].symbol === grid[r][c + 1].symbol)
+        ) {
+          solveObj.solveable = false;
+          solveObj.culprits = [...solveObj.culprits, ...[[r, c], [r, c + 1]]];
+        }    
+      }   
+      // bottom neighbor
+      if (signs[r][c].bottom && grid[r][c].symbol && grid[r + 1][c].symbol) {
+        if (
+          (signs[r][c].bottom === 1 && grid[r][c].symbol !== grid[r + 1][c].symbol) ||
+          (signs[r][c].bottom === 2 && grid[r][c].symbol === grid[r + 1][c].symbol)
+        ) {
+          solveObj.solveable = false;
+          solveObj.culprits = [...solveObj.culprits, ...[[r, c], [r + 1, c]]];
+        }
+      }
     }
   }
 	return solveObj;
@@ -152,22 +198,23 @@ function SolveButton({ grid, setGrid, signs }) {
       effectRef.current = false;
       return; // Skip execution if the effect was triggered by itself
     }
-
+    
     const { solveable, culprits } = isSolveable(grid, signs);
     setCanBeSolved(!solveable);
     const newGrid = grid.map((row) => [...row]);
 
-    // have to set signs as well
+    for (let r = 0; r < grid.length; r++) 
+      for (let c = 0; c < grid[0].length; c++) 
+        newGrid[r][c] = {...newGrid[r][c], error: false}
+
     if (!solveable) {
-      for (const coord of culprits) {
+      const coords = cleanCoords(culprits);
+      for (const coord of coords) {
         const [r, c] = coord;
         newGrid[r][c] = {...newGrid[r][c], error: true};
       }
-    } else {
-      for (let r = 0; r < grid.length; r++) 
-        for (let c = 0; c < grid[0].length; c++) 
-          newGrid[r][c] = {...newGrid[r][c], error: false}
     }
+
     effectRef.current = true; // Mark that the grid update is from this effect
     setGrid(newGrid);
   }, [grid, signs, setGrid]);
