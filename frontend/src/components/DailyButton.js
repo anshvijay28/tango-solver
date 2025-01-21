@@ -1,6 +1,14 @@
+import axios from "axios";
+
 function DailyButton() {
-  const handleScrape = () => {
-    console.log("scraping!");
+  const handleScrape = async () => {
+    try {
+      const res = await axios("http://localhost:5000/scrape");
+      const data = res.data;
+      console.log(data.data);
+    } catch (err) {
+      console.log(`Error. Server responded with ${err}`);
+    }
   }
   
   return (
