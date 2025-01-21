@@ -1,5 +1,89 @@
 import { useEffect, useRef, useState } from "react";
 
+const solveBoard = (r, c, grid, signs) => {
+  if (r === grid.length)
+    return true;
+  else if (c === grid[0].length)
+    return solveBoard(r + 1, 0, grid, signs);
+  else if (grid[r][c].symbol)
+    return solveBoard(r, c + 1, grid, signs);
+  else {
+    for (let i = 1; i < 3; i++) {
+      if (valid(r, c, i, grid, signs)) {
+        grid[r][c].symbol = i;
+
+        if (solveBoard(r, c + 1, grid, signs))
+          return true;          
+
+        grid[r][c].symbol = 0;
+      }
+    }
+  }
+  return false;
+}
+
+// manually check we can but the value here
+const valid = (r, c, value, grid, signs) => {
+  // check for 3 consecutive symbols in row
+  if (
+    (c > 0 && c < grid[0].length - 1 && value === grid[r][c + 1].symbol && value === grid[r][c - 1].symbol) ||
+    (c >= 2 && value === grid[r][c - 1].symbol && value === grid[r][c - 2].symbol) ||
+    (c <= grid[0].length - 3 && value === grid[r][c + 1].symbol && value === grid[r][c + 2].symbol)
+  )
+    return false;
+  // check for 3 consecutive symbols in col
+  if (
+    (r > 0 && r < grid.length - 1 && value === grid[r + 1][c].symbol && value === grid[r - 1][c].symbol) ||
+    (r >= 2 && value === grid[r - 1][c].symbol && value === grid[r - 2][c].symbol) ||
+    (r <= grid.length - 3 && value === grid[r + 1][c].symbol && value === grid[r + 2][c].symbol)
+  )
+    return false;
+  // check less than 3 in row
+  let inRow = 0;
+  for (let row = 0; row < grid.length; row++) {
+    if (grid[row][c].symbol === value)
+      inRow++;
+
+    if (inRow >= 3)
+      return false;
+  }
+  // check less than 3 in col
+  let inCol = 0;
+  for (let col = 0; col < grid[0].length; col++) {
+    if (grid[r][col].symbol === value)
+      inCol++;
+
+    if (inCol >= 3)
+      return false;
+  }
+  // check if it adheres to all signage
+  if (
+    (signs[r][c].top === 1 && grid[r - 1][c].symbol && grid[r - 1][c].symbol !== value) ||
+    (signs[r][c].top === 2 && grid[r - 1][c].symbol === value)
+  )
+    return false;
+
+  if (
+    (signs[r][c].bottom === 1 && grid[r + 1][c].symbol && grid[r + 1][c].symbol !== value) ||
+    (signs[r][c].bottom === 2 && grid[r + 1][c].symbol === value)
+  )
+    return false;
+
+  if (
+    (signs[r][c].left === 1 && grid[r][c - 1].symbol && grid[r][c - 1].symbol !== value) ||
+    (signs[r][c].left === 2 && grid[r][c - 1].symbol === value)
+  )
+    return false;
+
+  if (
+    (signs[r][c].right === 1 && grid[r][c + 1].symbol && grid[r][c + 1].symbol !== value) ||
+    (signs[r][c].right === 2 && grid[r][c + 1].symbol === value)
+  )
+    return false;
+
+  return true;
+}
+
 const cleanCoords = (coords) => {
   const coordsStr = new Set(coords.map(JSON.stringify));
   const cleaned = [];
@@ -220,7 +304,13 @@ function SolveButton({ grid, setGrid, signs }) {
   }, [grid, signs, setGrid]);
 
 	const handleSolve = () => {
-    console.log("lets start solving!!!!");
+    let gridCopy = grid.map((row) => [...row]); // this will be mutated
+    if (solveBoard(0, 0, gridCopy, signs))
+      setGrid(gridCopy);
+    else {
+      console.log("somehow you inputted an unsolveable board");
+      console.table(grid.map(row => row.map(obj => obj.symbol)));
+    }
 	};
 
 	return (
