@@ -1,8 +1,9 @@
 import { useState } from "react";
 import "../styles/App.css";
-import Cell from "../components/Cell.js";
+import Cell from "./Cell.js";
 import SolveButton from "./SolveButton.js";
 import ClearButton from "./ClearButton.js";
+import DailyButton from "./DailyButton.js";
 
 function App() {
 	const [grid, setGrid] = useState(
@@ -60,6 +61,7 @@ function App() {
           setGrid={setGrid} 
           setSigns={setSigns} 
         />
+        <DailyButton />
 			</div>
 		</div>
 	);
