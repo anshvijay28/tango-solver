@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import Modal from "./Modal";
 
 const solveBoard = (r, c, grid, signs) => {
   if (r === grid.length)
@@ -275,6 +276,8 @@ const isSolveable = (grid, signs) => {  // SO MANY CASES!!!!
 
 function SolveButton({ grid, setGrid, signs }) {
   const [canBeSolved, setCanBeSolved] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+
   const effectRef = useRef(false);
 
   useEffect(() => {
@@ -308,19 +311,23 @@ function SolveButton({ grid, setGrid, signs }) {
     if (solveBoard(0, 0, gridCopy, signs))
       setGrid(gridCopy);
     else {
+      setShowModal(true);
       console.log("somehow you inputted an unsolveable board");
       console.table(grid.map(row => row.map(obj => obj.symbol)));
     }
 	};
 
 	return (
-		<button
-			onClick={handleSolve}
-      className="inline-flex h-12 items-center justify-center rounded-md bg-neutral-950 px-6 font-medium text-neutral-50 shadow-lg shadow-neutral-500/20 transition active:scale-95 mt-5 disabled:bg-neutral-400 disabled:cursor-not-allowed disabled:opacity-50"
-      disabled={canBeSolved}
-		>
-			Solve
-		</button>
+    <div>
+      {showModal && <Modal showModal={showModal} setShowModal={setShowModal}/>}
+      <button
+        onClick={handleSolve}
+        className="inline-flex h-12 items-center justify-center rounded-md bg-neutral-950 px-6 font-medium text-neutral-50 shadow-lg shadow-neutral-500/20 transition active:scale-95 mt-5 disabled:bg-neutral-400 disabled:cursor-not-allowed disabled:opacity-50"
+        disabled={canBeSolved}
+      >
+        Solve
+      </button>
+    </div>
 	);
 }
 
