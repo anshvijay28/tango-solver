@@ -1,6 +1,7 @@
 import "../styles/Cell.css";
 import moon from "../images/moon.png";
 import { CELL_SIZE, SYMBOL_SPACE, SYMBOL_OFFSET } from "../constants";
+import { useEffect } from "react";
 
 const boundsCheck = (row, col, dir, signs) => {
 	if (
@@ -102,6 +103,12 @@ function Cell({ bgColor, row, col, signs, setSigns, grid, setGrid }) {
         )`
 			: undefined,
 	};
+
+	useEffect(() => {
+    // add to local storage
+    localStorage.setItem("grid", JSON.stringify(grid));    
+    localStorage.setItem("signs", JSON.stringify(signs));
+	}, [grid, signs]);
 
 	return (
 		<button

@@ -6,6 +6,7 @@ import ClearButton from "./ClearButton.js";
 
 function App() {
 	const [grid, setGrid] = useState(
+    JSON.parse(localStorage.getItem("grid")) || 
 		Array.from({ length: 6 }, (_, r) =>
 			Array.from({ length: 6 }, (_, c) => ({
 				bgColor: "#F9F9F9",
@@ -18,6 +19,7 @@ function App() {
 	);
 
 	const [signs, setSigns] = useState(
+    JSON.parse(localStorage.getItem("signs")) || 
 		Array.from({ length: 6 }, () =>
 			Array.from({ length: 6 }, () => ({
 				left: 0,

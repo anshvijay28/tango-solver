@@ -22,6 +22,7 @@ function ClearButton({ setGrid, setSigns }) {
 			}))
 		);
 		setSigns(newSigns);
+		localStorage.clear();
 	};
 
 	return (
