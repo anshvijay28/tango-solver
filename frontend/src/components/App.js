@@ -57,11 +57,14 @@ function App() {
 					signs={signs}
 				/>
 				<ClearButton 
-          text="Clear" 
-          setGrid={setGrid} 
-          setSigns={setSigns} 
-        />
-        <DailyButton />
+					text="Clear" 
+					setGrid={setGrid} 
+					setSigns={setSigns} 
+				/>
+				<DailyButton
+					setGrid={setGrid} 
+					setSigns={setSigns} 
+				/>
 			</div>
 		</div>
 	);
