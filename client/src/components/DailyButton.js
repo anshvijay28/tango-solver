@@ -4,13 +4,13 @@ import LoadingScreen from "./LoadingScreen";
 import { useState } from "react";
 
 function DailyButton({ setGrid, setSigns }) {
-  const [loading, setLoading] = useState(false);
+	const [loading, setLoading] = useState(false);
 
 	const handleScrape = async () => {
-		try {      
-      setLoading(true);
+		try {
+			setLoading(true);
 			const res = await axios(
-				`http://localhost:5000/scrape?url=${encodeURIComponent(URL)}`
+				`${process.env.BACKEND_URL}?url=${encodeURIComponent(URL)}`
 			);
 			const board = res.data.board;
 
@@ -45,33 +45,33 @@ function DailyButton({ setGrid, setSigns }) {
 					const sign = board[i].sign === "Equal" ? 1 : 2;
 					if (board[i].direction === "right") {
 						newSigns[r][c].right = sign;
-						newSigns[r][c + 1].left = sign
+						newSigns[r][c + 1].left = sign;
 					}
 					if (board[i].direction === "down") {
 						newSigns[r][c].bottom = sign;
 						newSigns[r + 1][c].top = sign;
 					}
 				}
-			}			
+			}
 			setGrid(newGrid);
 			setSigns(newSigns);
 		} catch (err) {
 			console.log(`Error. Server responded with ${err}`);
 		} finally {
-      setLoading(false);
-    }
+			setLoading(false);
+		}
 	};
 
 	return (
-    <>      
-      {loading && <LoadingScreen />}
-      <button
-        onClick={handleScrape}
-        className="inline-flex h-12 items-center justify-center rounded-md bg-neutral-950 px-6 font-medium text-neutral-50 shadow-lg shadow-neutral-500/20 transition active:scale-95 mt-5 disabled:bg-neutral-400 disabled:cursor-not-allowed disabled:opacity-50"
-      >
-        Daily
-      </button>
-    </>
+		<>
+			{loading && <LoadingScreen />}
+			<button
+				onClick={handleScrape}
+				className="inline-flex h-12 items-center justify-center rounded-md bg-neutral-950 px-6 font-medium text-neutral-50 shadow-lg shadow-neutral-500/20 transition active:scale-95 mt-5 disabled:bg-neutral-400 disabled:cursor-not-allowed disabled:opacity-50"
+			>
+				Daily
+			</button>
+		</>
 	);
 }
 
