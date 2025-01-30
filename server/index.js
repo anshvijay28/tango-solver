@@ -51,7 +51,7 @@ app.get("/scrape", async (req, res) => {
 		console.error("Scraping error:", err);
 		res
 			.status(500)
-			.json({ error: "An error occurred while scraping the webpage." });
+			.json({ error: `An error occurred while scraping the webpage. ${err}` });
 	}
 });
 
