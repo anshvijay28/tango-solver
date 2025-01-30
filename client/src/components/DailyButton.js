@@ -8,9 +8,13 @@ function DailyButton({ setGrid, setSigns }) {
 
 	const handleScrape = async () => {
 		try {
+			const BACKEND_URL =
+				process.env.NODE_ENV === "development"
+					? "http://localhost:5000/scrape"
+					: "https://tango-solver-server.vercel.app/scrape";
 			setLoading(true);
 			const res = await axios(
-				`${process.env.BACKEND_URL}?url=${encodeURIComponent(URL)}`
+				`${BACKEND_URL}?url=${encodeURIComponent(URL)}`
 			);
 			const board = res.data.board;
 
