@@ -1,6 +1,8 @@
 const express = require("express");
+const puppeteer_core = require("puppeteer-core");
 const puppeteer = require("puppeteer");
 const cors = require("cors");
+const chromium = require("@sparticuz/chromium");
 
 const app = express();
 app.use(cors());
@@ -15,19 +17,25 @@ app.get("/scrape", async (req, res) => {
 
 	let browser;
 	try {
-		browser = await puppeteer.launch({ headless: "new" });
+		browser = await puppeteer_core.launch({
+			args: chromium.args,
+			executablePath: await chromium.executablePath(),
+			//executablePath: "/Users/anshvijay/.cache/puppeteer/chrome/mac_arm-132.0.6834.110/chrome-mac-arm64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing",
+			headless: chromium.headless,
+		});
+		// browser = await puppeteer.launch();
 
 		// Open tango
 		const tangoPage = await browser.newPage();
 		await tangoPage.goto(URL, { waitUntil: "domcontentloaded" });
 
 		// press start game
-		await tangoPage.waitForSelector("button#ember25");
-		await tangoPage.click("button#ember25");
+		await tangoPage.waitForSelector("div.launch-footer button");
+		await tangoPage.click("div.launch-footer button");
 
 		// exit from tutorial
-		await tangoPage.waitForSelector("button#ember36");
-		await tangoPage.click("button#ember36");
+		await tangoPage.waitForSelector(`div#artdeco-modal-outlet button[aria-label="Dismiss"]`);
+		await tangoPage.click(`div#artdeco-modal-outlet button[aria-label="Dismiss"]`);
 
 		const cellValues = await tangoPage.evaluate(() => {
 			const cellList = document.querySelectorAll(".lotka-cell");
@@ -46,6 +54,8 @@ app.get("/scrape", async (req, res) => {
 			});
 		});
 
+		await browser.close();
+
 		res.json({ board: cellValues });
 	} catch (err) {
 		console.error("Scraping error:", err);
@@ -58,3 +68,4 @@ app.get("/scrape", async (req, res) => {
 app.listen(PORT, () => {
 	console.log(`Server listening on port ${5000}`);
 });
+                                                               
