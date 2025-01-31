@@ -1,8 +1,8 @@
 {
     "version": 2,
-    "routes": [{ "src": "/scrape", "dest": "/index.js" }],
+    "routes": [{ "src": "/api/scrape", "dest": "/api/index.js" }],
     "functions": {
-        "index": {
+        "api/index": {
             "memory": 1024,
             "maxDuration": 30
         }

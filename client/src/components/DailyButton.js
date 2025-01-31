@@ -10,11 +10,11 @@ function DailyButton({ setGrid, setSigns }) {
 		try {
 			const BACKEND_URL =
 				process.env.NODE_ENV === "development"
-					? "http://localhost:5000/scrape"
-					: "https://tango-solver-server.vercel.app/scrape";
+					? "http://localhost:5000/api/scrape"
+					: "https://tango-solver-server.vercel.app/api/scrape";
 
 			console.log(`BACKEND_URL = ${BACKEND_URL}`);
-			
+
 			setLoading(true);
 			const res = await axios(
 				`${BACKEND_URL}?url=${encodeURIComponent(URL)}`
