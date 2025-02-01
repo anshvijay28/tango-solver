@@ -1,5 +1,4 @@
 const express = require("express");
-const puppeteer_core = require("puppeteer-core");
 const puppeteer = require("puppeteer");
 const cors = require("cors");
 require('dotenv').config();
