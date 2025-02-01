@@ -1,7 +1,7 @@
 {
     "version": 2,
     "routes": [
-      { "src": "/(.*)", "dest": "/" }
+      { "src": "/(.*)", "dest": "/api" }
     ],
     "functions": {
       "api/index.js": {
