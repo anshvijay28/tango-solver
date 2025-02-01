@@ -44,8 +44,11 @@ const dirToNeiInc = {
 	east: [0, 1],
 };
 
-function Cell({ bgColor, row, col, signs, setSigns, grid, setGrid }) {
+function Cell({ row, col, signs, setSigns, grid, setGrid, lockedClicks }) {
 	const handleClick = (e) => {
+		// locked check
+		if (grid[row][col].locked) return;
+
 		const rect = e.target.getBoundingClientRect();
 
 		const x = e.clientX - rect.left;
@@ -68,7 +71,7 @@ function Cell({ bgColor, row, col, signs, setSigns, grid, setGrid }) {
 		const dir = Object.keys(directions).find((key) => directions[key]);
 
 		// some bounds checking for edge clicks
-		if (north || south || west || east) {
+		if (lockedClicks % 2 === 0 && (north || south || west || east)) {
 			// bounds check
 			if (!boundsCheck(row, col, dir, signs)) return;
 
@@ -92,7 +95,7 @@ function Cell({ bgColor, row, col, signs, setSigns, grid, setGrid }) {
 	};
 
 	const styleObj = {
-		backgroundColor: bgColor,
+		backgroundColor: grid[row][col].locked ? "#d9d9d9" : "#F9F9F9",
 		backgroundImage: grid[row][col].error
 			? `repeating-linear-gradient(
           45deg, 
@@ -105,9 +108,9 @@ function Cell({ bgColor, row, col, signs, setSigns, grid, setGrid }) {
 	};
 
 	useEffect(() => {
-    // add to local storage
-    localStorage.setItem("grid", JSON.stringify(grid));    
-    localStorage.setItem("signs", JSON.stringify(signs));
+		// add to local storage
+		localStorage.setItem("grid", JSON.stringify(grid));
+		localStorage.setItem("signs", JSON.stringify(signs));
 	}, [grid, signs]);
 
 	return (

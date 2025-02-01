@@ -5,17 +5,20 @@ import SolveButton from "./SolveButton.js";
 import ClearButton from "./ClearButton.js";
 import DailyButton from "./DailyButton.js";
 import githubLogo from "../images/github_logo.png";
+import LockButton from "./LockButton.js";
 
 function App() {
+	const [lockedClicks, setLockedClicks] = useState(0);
+
 	const [grid, setGrid] = useState(
 		JSON.parse(localStorage.getItem("grid")) ||
 			Array.from({ length: 6 }, (_, r) =>
 				Array.from({ length: 6 }, (_, c) => ({
-					bgColor: "#F9F9F9",
 					row: r,
 					col: c,
 					symbol: 0,
 					error: false,
+					locked: false,
 				}))
 			)
 	);
@@ -34,9 +37,7 @@ function App() {
 
 	return (
 		<div className="App">
-			<h1
-				className="mb-4 -mt-3 text-4xl font-extrabold leading-none tracking-tight md:text-5xl lg:text-6xl"
-			>
+			<h1 className="mb-4 -mt-3 text-4xl font-extrabold leading-none tracking-tight md:text-5xl lg:text-6xl">
 				Tango Solver!
 			</h1>
 			<div className="gridContainer mb-4">
@@ -44,21 +45,36 @@ function App() {
 					row.map((cell) => (
 						<Cell
 							key={`${cell.row}-${cell.col}`}
-							bgColor={cell.bgColor}
 							row={cell.row}
 							col={cell.col}
 							signs={signs}
 							setSigns={setSigns}
 							grid={grid}
 							setGrid={setGrid}
+							lockedClicks={lockedClicks}
 						/>
 					))
 				)}
 			</div>
 			<div className="button-container">
 				<SolveButton text="Solve" grid={grid} setGrid={setGrid} signs={signs} />
-				<ClearButton text="Clear" setGrid={setGrid} setSigns={setSigns} />
-				<DailyButton setGrid={setGrid} setSigns={setSigns} />
+				<ClearButton
+					text="Clear"
+					setGrid={setGrid}
+					setSigns={setSigns}
+					setLockedClicks={setLockedClicks}
+				/>
+				<DailyButton
+					setGrid={setGrid}
+					setSigns={setSigns}
+					lockedClicks={lockedClicks}
+					setLockedClicks={setLockedClicks}
+				/>
+				<LockButton
+					setGrid={setGrid}
+					lockedClicks={lockedClicks}
+					setLockedClicks={setLockedClicks}
+				/>
 			</div>
 			<a href="https://github.com/anshvijay28" target="_blank" rel="noreferrer">
 				<img

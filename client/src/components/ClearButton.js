@@ -1,13 +1,13 @@
-function ClearButton({ setGrid, setSigns }) {
+function ClearButton({ setGrid, setSigns, setLockedClicks }) {
 	const handleClear = () => {
 		// clear cells
 		const newGrid = Array.from({ length: 6 }, (_, r) =>
 			Array.from({ length: 6 }, (_, c) => ({
-				bgColor: "#F9F9F9",
 				row: r,
 				col: c,
 				symbol: 0,
 				error: false,
+				locked: false,
 			}))
 		);
 		setGrid(newGrid);
@@ -22,6 +22,7 @@ function ClearButton({ setGrid, setSigns }) {
 			}))
 		);
 		setSigns(newSigns);
+		setLockedClicks(0);
 		localStorage.clear();
 	};
 
