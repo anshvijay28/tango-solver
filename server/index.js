@@ -2,7 +2,9 @@ const express = require("express");
 const puppeteer_core = require("puppeteer-core");
 const puppeteer = require("puppeteer");
 const cors = require("cors");
-const chromium = require("@sparticuz/chromium");
+const chromium = require('chrome-aws-lambda');
+// const chromium = require("@sparticuz/chromium");
+
 
 const app = express();
 app.use(cors());
@@ -27,12 +29,19 @@ app.get("/scrape", async (req, res) => {
 	let browser;
 
 	try {
+		browser = await chromium.puppeteer.launch({
+			args: chromium.args,
+			defaultViewport: chromium.defaultViewport,
+			executablePath: await chromium.executablePath,
+			headless: chromium.headless,
+			ignoreHTTPSErrors: true,
+		  });
 		// browser = await puppeteer_core.launch({
 		// 	args: chromium.args,
 		// 	executablePath: chromiumBin,
 		// 	headless: chromium.headless,
 		// });
-		browser = await puppeteer.launch();
+		// browser = await puppeteer.launch();
 		console.log(`I was able to set up the broswer`);
 
 		// Open tango
