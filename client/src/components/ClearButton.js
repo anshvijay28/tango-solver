@@ -28,7 +28,7 @@ function ClearButton({ setGrid, setSigns }) {
 	return (
 		<button
 			onClick={handleClear}
-			className="inline-flex h-12 items-center justify-center rounded-md bg-neutral-950 px-6 font-medium text-neutral-50 shadow-lg shadow-neutral-500/20 transition active:scale-95 mt-5"
+			className="inline-flex h-16 items-center justify-center rounded-md bg-neutral-950 px-8 font-semibold text-xl text-neutral-50 shadow-xl shadow-neutral-500/20 transition active:scale-95 mt-6"
 		>
 			Clear
 		</button>

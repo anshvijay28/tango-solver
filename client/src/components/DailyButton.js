@@ -13,12 +13,8 @@ function DailyButton({ setGrid, setSigns }) {
 					? "http://localhost:5000/scrape"
 					: "https://tango-solver-server.vercel.app/scrape";
 
-			console.log(`BACKEND_URL = ${BACKEND_URL}`);
-
 			setLoading(true);
-			const res = await axios(
-				`${BACKEND_URL}?url=${encodeURIComponent(URL)}`
-			);
+			const res = await axios(`${BACKEND_URL}?url=${encodeURIComponent(URL)}`);
 			const board = res.data.board;
 
 			// clear cells
@@ -74,7 +70,7 @@ function DailyButton({ setGrid, setSigns }) {
 			{loading && <LoadingScreen />}
 			<button
 				onClick={handleScrape}
-				className="inline-flex h-12 items-center justify-center rounded-md bg-neutral-950 px-6 font-medium text-neutral-50 shadow-lg shadow-neutral-500/20 transition active:scale-95 mt-5 disabled:bg-neutral-400 disabled:cursor-not-allowed disabled:opacity-50"
+				className="inline-flex h-16 items-center justify-center rounded-md bg-neutral-950 px-8 font-semibold text-xl text-neutral-50 shadow-xl shadow-neutral-500/20 transition active:scale-95 mt-6"
 			>
 				Daily
 			</button>

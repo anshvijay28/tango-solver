@@ -7,19 +7,12 @@
 
 }
 
-.cellContainer {
-    margin-top: 20px;
-    margin-left: 20px;
-    display: flex;
-    flex-direction: row;
-    gap: 0px;
-}
-
 .gridContainer {
     display: grid;
-    grid-template-columns: repeat(6, 55px);
-    grid-template-rows: repeat(6, 55px);
+    grid-template-columns: repeat(6, 90px);
+    grid-template-rows: repeat(6, 90px);
     gap: 0px; 
+    margin-top: 1rem;
   }
 
 .button-container {

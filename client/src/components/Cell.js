@@ -119,17 +119,17 @@ function Cell({ bgColor, row, col, signs, setSigns, grid, setGrid }) {
 			{grid[row][col].symbol === 0 && (
 				<div
 					style={{ pointerEvents: "none" }}
-					className="w-6 h-6 rounded-full"
+					className="w-8 h-8 rounded-full"
 				></div>
 			)}
 			{grid[row][col].symbol === 1 && (
 				<div
 					style={{ pointerEvents: "none" }}
-					className="w-6 h-6 rounded-full bg-yellow-400 border-2 border-yellow-500"
+					className="w-8 h-8 rounded-full bg-yellow-400 border-2 border-yellow-500"
 				></div>
 			)}
 			{grid[row][col].symbol === 2 && (
-				<div style={{ pointerEvents: "none" }} className="w-6 h-6">
+				<div style={{ pointerEvents: "none" }} className="w-8 h-8">
 					<img src={moon} alt="moon.png" />
 				</div>
 			)}
@@ -138,7 +138,7 @@ function Cell({ bgColor, row, col, signs, setSigns, grid, setGrid }) {
 			{row > 0 && signs[row][col].top > 0 && (
 				<div
 					style={{ pointerEvents: "none" }}
-					className="absolute -top-2 left-1/2 -translate-x-1/2 z-20 text-xs font-bold bg-white rounded-full px-1 leading-[0.75rem]"
+					className="absolute -top-3 left-1/2 -translate-x-1/2 z-20 text-base font-bold bg-white rounded-full px-1 py-1 leading-[0.75rem]"
 				>
 					{signs[row][col].top === 1 ? `=` : `×`}
 				</div>
@@ -147,7 +147,7 @@ function Cell({ bgColor, row, col, signs, setSigns, grid, setGrid }) {
 			{col < signs[0].length - 1 && signs[row][col].right > 0 && (
 				<div
 					style={{ pointerEvents: "none" }}
-					className="absolute -right-2 z-20 text-xs font-bold bg-white rounded-full px-1"
+					className="absolute -right-2.5 z-20 text-base font-bold bg-white rounded-full px-1"
 				>
 					{signs[row][col].right === 1 ? `=` : `×`}
 				</div>
