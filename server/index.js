@@ -26,30 +26,30 @@ app.get("/scrape", async (req, res) => {
 
 	let browser;
 	try {
-		browser = await puppeteer_core.launch({
-			args: chromium.args,
-			executablePath: chromiumBin,
-			headless: chromium.headless,
-		});
-		// browser = await puppeteer.launch();
+		// browser = await puppeteer_core.launch({
+		// 	args: chromium.args,
+		// 	executablePath: chromiumBin,
+		// 	headless: chromium.headless,
+		// });
+		browser = await puppeteer.launch();
 
 		// Open tango
 		const tangoPage = await browser.newPage();
 		await tangoPage.goto(URL, { waitUntil: "domcontentloaded" });
 
-		console.log("was able to open browser")
+		console.log("was able to open browser");
 
 		// press start game
 		await tangoPage.waitForSelector("div.launch-footer button");
 		await tangoPage.click("div.launch-footer button");
 
-		console.log("was able to click start game")
+		console.log("was able to click start game");
 
 		// exit from tutorial
 		await tangoPage.waitForSelector(`div#artdeco-modal-outlet button[aria-label="Dismiss"]`);
 		await tangoPage.click(`div#artdeco-modal-outlet button[aria-label="Dismiss"]`);
 
-		console.log("was able to exit tutorial")
+		console.log("was able to exit tutorial");
 
 		const cellValues = await tangoPage.evaluate(() => {
 			const cellList = document.querySelectorAll(".lotka-cell");

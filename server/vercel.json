@@ -1,10 +1,12 @@
 {
     "version": 2,
-    "routes": [{ "src": "/api/scrape", "dest": "/api/index.js" }],
-    "functions": {
-        "api/index.js": {
-            "memory": 1024,
-            "maxDuration": 60
-        }
-    }
-}
+    "builds": [
+      {
+        "src": "index.js",
+        "use": "@vercel/node"
+      }
+    ],
+    "routes": [
+      { "src": "/(.*)", "dest": "/" }
+    ]
+  }
