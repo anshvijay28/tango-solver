@@ -27,12 +27,12 @@ app.get("/scrape", async (req, res) => {
 	let browser;
 
 	try {
-		browser = await puppeteer_core.launch({
-			args: chromium.args,
-			executablePath: chromiumBin,
-			headless: chromium.headless,
-		});
-		// browser = await puppeteer.launch();
+		// browser = await puppeteer_core.launch({
+		// 	args: chromium.args,
+		// 	executablePath: chromiumBin,
+		// 	headless: chromium.headless,
+		// });
+		browser = await puppeteer.launch();
 		console.log(`I was able to set up the broswer`);
 
 		// Open tango
