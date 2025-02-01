@@ -279,31 +279,40 @@ function SolveButton({ grid, setGrid, signs }) {
   const [showModal, setShowModal] = useState(false);
 
   const effectRef = useRef(false);
+  const timeoutRef = useRef(null); // Track the timeout
 
   useEffect(() => {
     if (effectRef.current) {
       effectRef.current = false;
       return; // Skip execution if the effect was triggered by itself
     }
-    
-    const { solveable, culprits } = isSolveable(grid, signs);
-    setCanBeSolved(!solveable);
-    const newGrid = grid.map((row) => [...row]);
 
-    for (let r = 0; r < grid.length; r++) 
-      for (let c = 0; c < grid[0].length; c++) 
-        newGrid[r][c] = {...newGrid[r][c], error: false}
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
 
-    if (!solveable) {
-      const coords = cleanCoords(culprits);
-      for (const coord of coords) {
-        const [r, c] = coord;
-        newGrid[r][c] = {...newGrid[r][c], error: true};
+    timeoutRef.current = setTimeout(() => {
+      const { solveable, culprits } = isSolveable(grid, signs);
+      setCanBeSolved(!solveable);
+      const newGrid = grid.map((row) => [...row]);
+  
+      for (let r = 0; r < grid.length; r++) 
+        for (let c = 0; c < grid[0].length; c++) 
+          newGrid[r][c] = {...newGrid[r][c], error: false}
+  
+      if (!solveable) {
+        const coords = cleanCoords(culprits);
+        for (const coord of coords) {
+          const [r, c] = coord;
+          newGrid[r][c] = {...newGrid[r][c], error: true};
+        }
       }
-    }
+  
+      effectRef.current = true;
+      setGrid(newGrid);
+    }, 500);
+    
 
-    effectRef.current = true; // Mark that the grid update is from this effect
-    setGrid(newGrid);
+    return () => clearTimeout(timeoutRef.current);
+
   }, [grid, signs, setGrid]);
 
 	const handleSolve = () => {
