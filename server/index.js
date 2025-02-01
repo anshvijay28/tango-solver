@@ -22,7 +22,7 @@ app.get("/scrape", async (req, res) => {
 	else
 		chromiumBin = await chromium.executablePath();
 
-	console.log(chromiumBin)
+	console.log(`The chromium binary path is ${chromiumBin}`);
 
 	let browser;
 
@@ -33,6 +33,7 @@ app.get("/scrape", async (req, res) => {
 			headless: chromium.headless,
 		});
 		// browser = await puppeteer.launch();
+		console.log(`I was able to set up the broswer`);
 
 		// Open tango
 		const tangoPage = await browser.newPage();
