@@ -25,13 +25,14 @@ app.get("/scrape", async (req, res) => {
 	console.log(chromiumBin)
 
 	let browser;
+
 	try {
-		// browser = await puppeteer_core.launch({
-		// 	args: chromium.args,
-		// 	executablePath: chromiumBin,
-		// 	headless: chromium.headless,
-		// });
-		browser = await puppeteer.launch();
+		browser = await puppeteer_core.launch({
+			args: chromium.args,
+			executablePath: chromiumBin,
+			headless: chromium.headless,
+		});
+		// browser = await puppeteer.launch();
 
 		// Open tango
 		const tangoPage = await browser.newPage();
