@@ -2,7 +2,9 @@ const express = require("express");
 const puppeteer_core = require("puppeteer-core");
 const puppeteer = require("puppeteer");
 const cors = require("cors");
-const chromium = require('chrome-aws-lambda');
+require('dotenv').config();
+
+// const chromium = require('chrome-aws-lambda');
 // const chromium = require("@sparticuz/chromium");
 
 
@@ -18,24 +20,30 @@ app.get("/scrape", async (req, res) => {
 		return res.status(400).json({ error: "Missing 'url' query parameter." });
 
 
-	let chromiumBin;
-	if (process.argv[2] === "dev") 
-		chromiumBin = "/Users/anshvijay/.cache/puppeteer/chrome/mac_arm-132.0.6834.110/chrome-mac-arm64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing";
-	else
-		chromiumBin = await chromium.executablePath();
+	// let chromiumBin;
+	// if (process.argv[2] === "dev") 
+	// 	chromiumBin = "/Users/anshvijay/.cache/puppeteer/chrome/mac_arm-132.0.6834.110/chrome-mac-arm64/Google Chrome for Testing.app/Contents/MacOS/Google Chrome for Testing";
+	// else
+	// 	chromiumBin = await chromium.executablePath();
 
-	console.log(`The chromium binary path is ${chromiumBin}`);
+	// console.log(`The chromium binary path is ${chromiumBin}`);
 
-	let browser;
+	// let browser;
 
 	try {
-		browser = await chromium.puppeteer.launch({
-			args: chromium.args,
-			defaultViewport: chromium.defaultViewport,
-			executablePath: await chromium.executablePath(),
-			headless: chromium.headless,
-			ignoreHTTPSErrors: true,
-		  });
+		console.log("aight bet")
+		console.log(process.env.BROWSERLESS_KEY);
+		const browser = await puppeteer.connect({
+			browserWSEndpoint: `wss://chrome.browserless.io?token=${process.env.BROWSERLESS_KEY}`,
+		})
+
+		// browser = await chromium.puppeteer.launch({
+		// 	args: chromium.args,
+		// 	defaultViewport: chromium.defaultViewport,
+		// 	executablePath: await chromium.executablePath(),
+		// 	headless: chromium.headless,
+		// 	ignoreHTTPSErrors: true,
+		//   });
 		// browser = await puppeteer_core.launch({
 		// 	args: chromium.args,
 		// 	executablePath: chromiumBin,
