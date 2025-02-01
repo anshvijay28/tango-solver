@@ -31,8 +31,6 @@ app.get("/scrape", async (req, res) => {
 	// let browser;
 
 	try {
-		console.log("aight bet")
-		console.log(process.env.BROWSERLESS_KEY);
 		const browser = await puppeteer.connect({
 			browserWSEndpoint: `wss://chrome.browserless.io?token=${process.env.BROWSERLESS_KEY}`,
 		})

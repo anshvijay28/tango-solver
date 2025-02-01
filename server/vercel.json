@@ -8,5 +8,10 @@
     ],
     "routes": [
       { "src": "/(.*)", "dest": "/" }
-    ]
+    ],
+    "functions": {
+      "index": {
+        "maxDuration": 45
+      }
+    }
   }
