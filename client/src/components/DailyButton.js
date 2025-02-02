@@ -3,7 +3,7 @@ import { URL } from "../constants";
 import LoadingScreen from "./LoadingScreen";
 import { useState } from "react";
 
-function DailyButton({ setGrid, setSigns, lockedClicks, setLockedClicks }) {
+function DailyButton({ setGrid, setSigns, setLockedClicks }) {
 	const [loading, setLoading] = useState(false);
 
 	const handleScrape = async () => {
@@ -57,9 +57,7 @@ function DailyButton({ setGrid, setSigns, lockedClicks, setLockedClicks }) {
 			}
 			setGrid(newGrid);
 			setSigns(newSigns);
-
-			// then lock the board
-			setLockedClicks(lockedClicks + 1);
+			setLockedClicks(1);
 		} catch (err) {
 			console.log(`Error. Server responded with ${err}`);
 		} finally {
