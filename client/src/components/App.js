@@ -8,7 +8,9 @@ import githubLogo from "../images/github_logo.png";
 import LockButton from "./LockButton.js";
 
 function App() {
-	const [lockedClicks, setLockedClicks] = useState(0);
+	const [lockedClicks, setLockedClicks] = useState(() => {
+		return parseInt(localStorage.getItem("lockedClicks")) || 0;
+	});
 
 	const [grid, setGrid] = useState(
 		JSON.parse(localStorage.getItem("grid")) ||
@@ -67,7 +69,6 @@ function App() {
 				<DailyButton
 					setGrid={setGrid}
 					setSigns={setSigns}
-					lockedClicks={lockedClicks}
 					setLockedClicks={setLockedClicks}
 				/>
 				<LockButton
